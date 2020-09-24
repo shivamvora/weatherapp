@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon"
+    href=https://media-exp1.licdn.com/dms/image/C5103AQGGUfP1zV6vTg/profile-displayphoto-shrink_200_200/0?e=1605139200&v=beta&t=H9xc3kt3h_J8X05S8o42B7b8s3ngBWY47UWCIw5PZlA
+    type="image/gif" sizes="16x16" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+      integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+      crossorigin="anonymous"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather of Rajkot | By Shivam Vora</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+      }
+      .main {
+        height: 100vh;
+        width: 100vw;
+        background: linear-gradient(rgb(228, 228, 228), rgb(243, 232, 232));
+        position: relative;
+      }
+
+      .box {
+        border: 3px solid gray;
+        min-width: 20rem;
+        min-height: 35rem;
+        text-align: center;
+        background-color: rgb(182, 196, 214);
+        background: linear-gradient(
+          rgb(182, 196, 214) 50%,
+          rgb(200, 222, 250) 70%
+        );
+        line-height: 5rem;
+        padding-top: 6rem;
+        border: none;
+        border-radius: 50px;
+        box-shadow: 5px 3px 8px 4px gray;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        overflow: hidden;
+        transform: translate(-50%, -50%);
+      }
+      .wave {
+        opacity: 0.3;
+        position: absolute;
+        top: 125%;
+        left: 50%;
+        background: rgb(240, 224, 136);
+        width: 50rem;
+        height: 50rem;
+        margin-left: -25rem;
+        margin-top: -25rem;
+        transform-origin: 50% 48%;
+        border-radius: 43%;
+        animation: drift 10000ms infinite linear;
+        z-index: 1;
+      }
+      @keyframes drift {
+        0% {
+          transform: rotate(0deg);
+        }
+        20% {
+          transform: rotate(55deg);
+        }
+        40% {
+          transform: rotate(180deg);
+        }
+        50% {
+          transform: perspective(55deg);
+        }
+        70% {
+          transform: rotate3d(208deg);
+        }
+      }
+      #date {
+        font-weight: 900;
+        font-size: 1.3rem;
+      }
+      #weathercon .fas {
+        font-size: 3rem;
+        animation: fas-anime 3s linear infinite alternate;
+      }
+      @keyframes fas-anime {
+        0% {
+          transform: scale(0.8);
+        }
+        10% {
+          transform: scale(1.5);
+        }
+        50% {
+          transform: scale3d(5.5);
+        }
+      }
+      #skew{
+        animation: around 2s infinite alternate;
+      }
+      @keyframes around{
+        0%{
+          transform: skew(5deg,10deg);
+        }
+        10%{
+          transform: skew(10deg,5deg);
+        }
+        15%{
+          transform: skew(5deg,10deg);
+        }
+        20%{
+          transform: skew(10deg,5deg);
+        }
+
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="box">
+        <div class="wave one"></div>
+        <div class="wave two"></div>
+        <div class="wave three"></div>
+
+        <div id="weathercon">
+          <i class="fas fa-cloud-sun fa-3x" style="color: #f6ff75"></i>
+        </div>
+
+        <div class="info">
+          <h2 class="location">
+            <i class="fas fa-street-view fa-2x" id="skew" style="color: #fff"></i>
+            {%location%},{%country%}
+          </h2>
+          <p id="date"></p>
+          <h1 class="mytemp">{%tempval%}&deg;C</h1>
+          <h3 class="tempmin_max">Min {%tempmin%}&deg;C | Max {%tempmax%}&deg;C</h3>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const curDate = document.getElementById("date");
+      let weathercon = document.getElementById("weathercon");
+
+      const tempStatus = "{%tempstatus%}";
+
+        if(tempStatus == "Sunny"){
+          weathercon.innerHTML = "<i class='fas fa-cloud-sun fa-3x' style='color: #f6ff75'></i>"
+        }
+        else if (tempStatus == "Clouds"){
+          weathercon.innerHTML = "<i class='fas fa-cloud fa-3x' style='color: white'></i>"
+        }
+        else if (tempStatus == "Rainy"){
+          weathercon.innerHTML = "<i class='fas fa-cloud-rain fa-3x' style='color: #f6ff75'></i>"
+        }
+        else{
+          weathercon.innerHTML = "<i class='fas fa-cloud fa-3x' style='color: #f6ff75'></i>"
+        }
+
+      const getCurrentDay = () => {
+        var weekday = new Array(7);
+        weekday[0] = "Sunday";
+        weekday[1] = "Monday";
+        weekday[2] = "Tuesday";
+        weekday[3] = "Wednesday";
+        weekday[4] = "Thursday";
+        weekday[5] = "Friday";
+        weekday[6] = "Saturday";
+
+        let currentTime = new Date();
+        let day = weekday[currentTime.getDay()];
+        return day;
+      };
+
+      const getCurrentTime = () => {
+        var months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "June",
+          "July",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+
+        var now = new Date();
+        var month = months[now.getMonth()];
+        var date = now.getDate();
+
+        let hours = now.getHours();
+        let mins = now.getMinutes();
+
+        let periods = "AM";
+
+        if (hours > 11) {
+          periods = "PM";
+          if (hours > 12) hours -= 12;
+        }
+        if (mins < 10) {
+          mins = "0" + mins;
+        }
+        return ` ${month} ${date} | ${hours}:${mins} ${periods}`;
+      };
+
+      curDate.innerHTML = getCurrentDay() + " | " + getCurrentTime();
+    </script>
+  </body>
+</html>
